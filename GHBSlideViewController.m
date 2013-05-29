@@ -157,6 +157,9 @@
                     // animate to closed position
                     [weakSelf setSlidePosition:0 animate:YES];
                     
+                    // set GestureRecognizers
+                    [weakSelf addGestureRecognizer];
+                    
                 }];
     
 
@@ -174,20 +177,17 @@
 }
 - (void) toggleSlideViewController:(animationComplete)completion
 {
+    float position = 0;
     if (_currentSlideState == SlideStateClosed) {
-        [self setSlidePosition:SLIDE_MENU_WIDTH
-                       animate:YES
-                    completion:^(BOOL completed){
-                        completion(completed);
-                    }];
-        
-    } else {
-        [self setSlidePosition:0
-                       animate:YES
-                    completion:^(BOOL completed){
-                        completion(completed);
-                    }];
+        position = SLIDE_MENU_WIDTH;
     }
+    
+    [self setSlidePosition:SLIDE_MENU_WIDTH
+                   animate:YES
+                completion:^(BOOL completed){
+                    completion(completed);
+                }];
+
 
 }
 
