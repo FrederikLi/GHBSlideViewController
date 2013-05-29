@@ -13,7 +13,7 @@ The `LeftViewController` fades out when the `MainViewController` slides in, to p
 Usage
 -------------
 Add this code and you're all done.
-```objective-c
+```
 UIViewController *leftViewController = [[UIViewController alloc] init];
 UIViewController *mainViewController = [[UIViewController alloc] init];
 
@@ -22,7 +22,7 @@ GHBSlideViewController *slideViewController = [[GHBSlideViewController alloc] in
 ```
 
 If you want to reveal the `LeftViewController`, you can use the following code:
-```objective-c
+```
 GHBSlideViewController *slideViewController = (GHBSlideViewController *)self.navigationController.parentViewController;
 [slideViewController toggleSlideViewController:^(BOOL completed){
     // done sliding
