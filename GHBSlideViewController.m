@@ -182,7 +182,7 @@
         position = SLIDE_MENU_WIDTH;
     }
     
-    [self setSlidePosition:SLIDE_MENU_WIDTH
+    [self setSlidePosition:position
                    animate:YES
                 completion:^(BOOL completed){
                     completion(completed);
