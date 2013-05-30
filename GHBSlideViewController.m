@@ -130,7 +130,9 @@
     // set parentview controller
     [self addChildViewController:mainViewController];
     [self.view addSubview:mainViewController.view];
-    [mainViewController didMoveToParentViewController:self];
+    
+    if ([mainViewController respondsToSelector:@selector(didMoveToParentViewController)])
+        [mainViewController didMoveToParentViewController:self];
     
     _mainViewController = mainViewController;
 }
@@ -138,14 +140,18 @@
 {
 
     // slide out of view
-    __weak typeof(self) weakSelf = self;
+    __block typeof(self) weakSelf = self;
     [self setSlidePosition:self.view.bounds.size.width
                    animate:YES
                 completion:^(BOOL finished) {
                     
                     // clean up 'old' mainViewController
-                    [weakSelf.mainViewController willMoveToParentViewController:nil];
-                    [weakSelf.mainViewController removeFromParentViewController];
+                    if ([weakSelf.mainViewController respondsToSelector:@selector(willMoveToParentViewController)])
+                        [weakSelf.mainViewController willMoveToParentViewController:nil];
+
+                    if ([weakSelf.mainViewController respondsToSelector:@selector(removeFromParentViewController)])
+                        [weakSelf.mainViewController removeFromParentViewController];
+                    
                     [weakSelf.mainViewController.view removeFromSuperview];
                     
                     // add new mainViewController
@@ -327,6 +333,7 @@
     
     // tap GestureRecognizer
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapRecognizer:)];
+    [tapRecognizer setCancelsTouchesInView:NO];
     [_mainViewController.view addGestureRecognizer:tapRecognizer];
     
 }

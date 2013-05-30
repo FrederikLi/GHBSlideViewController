@@ -2,7 +2,9 @@ Slide ViewController for Objective-C
 ======================================
 
 This SlideViewController is used for Slide-menus (or Navigation Drawer). 
-It has a custom scale animation for the 'menu' viewController
+It has a custom scale animation for the 'menu' viewController.
+
+Works with iOS 4.3 and up.
 
 Configuration
 -------------
