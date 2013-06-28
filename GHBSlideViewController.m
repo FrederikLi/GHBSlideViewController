@@ -329,6 +329,7 @@
     UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panRecognizer:)];
     [panRecognizer setMinimumNumberOfTouches:1];
     [panRecognizer setMaximumNumberOfTouches:1];
+    panRecognizer.delegate = self;
     [self.view addGestureRecognizer:panRecognizer];
     
     // tap GestureRecognizer
@@ -339,6 +340,18 @@
 }
 
 #pragma mark - UIPanGestureRecognizer Delegate
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    // make sure we want to open the left view
+    // so UITableViews can recognize swipe to delete gesures
+    CGPoint touchPoint = [gestureRecognizer locationInView:self.view];
+    if (touchPoint.x > 40 && _currentSlideState == SlideStateClosed) {
+        return NO;
+    } else {
+        return YES;
+    }
+
+}
 - (void) panRecognizer:(UIPanGestureRecognizer *)gestureRecognizer
 {
     CGPoint touchPoint = [gestureRecognizer translationInView:_mainViewController.view];
