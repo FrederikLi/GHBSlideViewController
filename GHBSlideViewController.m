@@ -92,7 +92,13 @@
         // set alpha
         _leftViewController.view.layer.opacity = MINIMUM_ALPHA;
         
+        // set parentviewController
+        [self addChildViewController:_leftViewController];
         [self.view addSubview:_leftViewController.view];
+
+        if ([_leftViewController respondsToSelector:@selector(didMoveToParentViewController)])
+            [_leftViewController didMoveToParentViewController:self];
+
         
     }
     if (_mainViewController) {
@@ -144,7 +150,7 @@
     [self setSlidePosition:self.view.bounds.size.width
                    animate:YES
                 completion:^(BOOL finished) {
-                    
+
                     // clean up 'old' mainViewController
                     if ([weakSelf.mainViewController respondsToSelector:@selector(willMoveToParentViewController)])
                         [weakSelf.mainViewController willMoveToParentViewController:nil];
@@ -159,7 +165,7 @@
                     CGRect frame = mainViewController.view.frame;
                     frame.origin = CGPointMake(weakSelf.view.bounds.size.width, 0);
                     mainViewController.view.frame = frame;
-                    
+
                     // animate to closed position
                     [weakSelf setSlidePosition:0 animate:YES];
                     
