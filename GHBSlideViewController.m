@@ -144,39 +144,46 @@
 }
 - (void) setMainViewController:(UIViewController *)mainViewController
 {
-
-    // slide out of view
-    __block typeof(self) weakSelf = self;
-    [self setSlidePosition:self.view.bounds.size.width
-                   animate:YES
-                completion:^(BOOL finished) {
-
-                    // clean up 'old' mainViewController
-                    if ([weakSelf.mainViewController respondsToSelector:@selector(willMoveToParentViewController)])
-                        [weakSelf.mainViewController willMoveToParentViewController:nil];
-
-                    if ([weakSelf.mainViewController respondsToSelector:@selector(removeFromParentViewController)])
-                        [weakSelf.mainViewController removeFromParentViewController];
-                    
-                    [weakSelf.mainViewController.view removeFromSuperview];
-                    
-                    // add new mainViewController
-                    [weakSelf addMainViewController:mainViewController];
-                    CGRect frame = mainViewController.view.frame;
-                    frame.origin = CGPointMake(weakSelf.view.bounds.size.width, 0);
-                    mainViewController.view.frame = frame;
-
-                    // animate to closed position
-                    [weakSelf setSlidePosition:0 animate:YES];
-                    
-                    // set GestureRecognizers
-                    [weakSelf addGestureRecognizer];
-                    
-                }];
-    
-
-
-    
+    // check if new mainViewController is different than the current mainViewController
+    if (mainViewController == self.mainViewController) {
+        
+        // same mainViewController found, animate to closed position
+        [self setSlidePosition:0 animate:YES];
+        
+    } else {
+        
+        // new mainViewController found, add it
+        
+        // slide out of view
+        __block typeof(self) weakSelf = self;
+        [self setSlidePosition:self.view.bounds.size.width
+                       animate:YES
+                    completion:^(BOOL finished) {
+                        
+                        // clean up 'old' mainViewController
+                        if ([weakSelf.mainViewController respondsToSelector:@selector(willMoveToParentViewController)])
+                            [weakSelf.mainViewController willMoveToParentViewController:nil];
+                        
+                        if ([weakSelf.mainViewController respondsToSelector:@selector(removeFromParentViewController)])
+                            [weakSelf.mainViewController removeFromParentViewController];
+                        
+                        [weakSelf.mainViewController.view removeFromSuperview];
+                        
+                        // add new mainViewController
+                        [weakSelf addMainViewController:mainViewController];
+                        CGRect frame = mainViewController.view.frame;
+                        frame.origin = CGPointMake(weakSelf.view.bounds.size.width, 0);
+                        mainViewController.view.frame = frame;
+                        
+                        // animate to closed position
+                        [weakSelf setSlidePosition:0 animate:YES];
+                        
+                        // set GestureRecognizers
+                        [weakSelf addGestureRecognizer];
+                        
+                    }];
+        
+    }
 
 }
 
