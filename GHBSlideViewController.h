@@ -54,6 +54,8 @@ typedef void(^animationComplete)(BOOL finished);
 
 @interface GHBSlideViewController : UIViewController <UIGestureRecognizerDelegate>
 
+@property (nonatomic, retain) UITapGestureRecognizer *tapRecognizer;
+
 @property (nonatomic, strong) UIViewController *leftViewController;
 @property (nonatomic, strong) UIViewController *mainViewController;
 

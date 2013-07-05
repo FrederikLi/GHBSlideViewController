@@ -45,6 +45,8 @@
 #define SLIDE_MENU_SHADOW_RADIUS    2.5f
 #define SLIDE_MENU_SHADOW_OPACITY   .5f
 
+#define LEFT_TOUCH_POSITION_FOR_SLIDE   120.f
+
 @interface GHBSlideViewController ()
 
 @end
@@ -278,6 +280,14 @@
                                  _currentSlideState = SlideStateOpen;
                              }
                              
+                             // set cancel touchesin view when leftViewController is shown
+                             if (_currentSlideState == SlideStateClosed) {
+                                 [_tapRecognizer setCancelsTouchesInView:NO];
+                             } else {
+                                 [_tapRecognizer setCancelsTouchesInView:YES];
+                             }
+
+                             
                              // return value for completion block
                              completion(YES);
                              
@@ -308,6 +318,7 @@
         completion(YES);
 
     }
+    
 }
 - (CGFloat) animationDurationFromStartPosition:(CGFloat)startPosition toEndPosition:(CGFloat)endPosition {
     CGFloat animationPositionDelta = ABS(endPosition - startPosition);
@@ -346,9 +357,9 @@
     [self.view addGestureRecognizer:panRecognizer];
     
     // tap GestureRecognizer
-    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapRecognizer:)];
-    [tapRecognizer setCancelsTouchesInView:NO];
-    [_mainViewController.view addGestureRecognizer:tapRecognizer];
+    _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapRecognizer:)];
+    [_tapRecognizer setCancelsTouchesInView:NO];
+    [_mainViewController.view addGestureRecognizer:_tapRecognizer];
     
 }
 
@@ -358,7 +369,7 @@
     // make sure we want to open the left view
     // so UITableViews can recognize swipe to delete gesures
     CGPoint touchPoint = [gestureRecognizer locationInView:self.view];
-    if (touchPoint.x > 40 && _currentSlideState == SlideStateClosed) {
+    if (touchPoint.x > LEFT_TOUCH_POSITION_FOR_SLIDE && _currentSlideState == SlideStateClosed) {
         return NO;
     } else {
         return YES;
