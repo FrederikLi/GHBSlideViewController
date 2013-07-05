@@ -337,13 +337,25 @@
 #pragma mark - UIInterfaceOrientationDelegate
 -(void)willRotateToInterfaceOrientation: (UIInterfaceOrientation)orientation duration:(NSTimeInterval)duration
 {
+    // if slideState is open, close it.
     if (_currentSlideState == SlideStateOpen) {
         [self toggleSlideViewController];
     }
     
     // prevent wrong placing of view when rotation and CATransform3DScale
     _leftViewController.view.layer.transform = CATransform3DScale(CATransform3DIdentity, 1, 1, 1);
+    
+}
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    // set frame of leftViewController
+    CGRect frame = self.view.bounds;
+    frame.size = CGSizeMake(SLIDE_MENU_WIDTH, frame.size.height);
+    
+    // set bounds
+    _leftViewController.view.frame = frame;
 
+    
 }
 
 #pragma mark - Gesture Handlers
